@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <meta charset="utf-8">
+        <title>文本编辑器</title>
+        <script>
+            function save() {
+                var title = document.getElementById("title").innerText
+                var data = document.getElementById("data").innerText
+
+                function fakeClick(obj) {
+                    var ev = document.createEvent("MouseEvents");
+                    ev.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                    obj.dispatchEvent(ev);
+                }
+
+                function exportRaw(name, data) {
+                    var urlObject = window.URL || window.webkitURL || window;
+                    var export_blob = new Blob([data]);
+                    var save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
+                    save_link.href = urlObject.createObjectURL(export_blob);
+                    save_link.download = name;
+                    fakeClick(save_link);
+                } 
+                
+                exportRaw(title + ".txt", data)
+            }
+        </script>
+    </head>
+    <body style="margin: 0; margin-top: 64px;">
+        <div class="Caution"><p>永久：不要在屏幕逻辑分辨率像素少于 400 的设备上使用。</p><p>七月五日：标题过长 Bug 暂未修复。</p></div>
+        <div class="Button"><button onclick="save()">保存</button></div>
+        <div id="title" class="title" contenteditable="true">你的文档标题</div>
+        <div id="data" class="data" contenteditable="true">你的文档内容</div>
+    </body>
+</html>
